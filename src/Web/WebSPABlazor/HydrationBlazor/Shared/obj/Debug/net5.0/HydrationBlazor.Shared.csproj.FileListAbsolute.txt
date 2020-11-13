@@ -1,0 +1,12 @@
+C:\prv\Projects\dotnet\blazorHydration\HydrationBlazor\HydrationBlazor\Shared\bin\Debug\net5.0\HydrationBlazor.Shared.deps.json
+C:\prv\Projects\dotnet\blazorHydration\HydrationBlazor\HydrationBlazor\Shared\bin\Debug\net5.0\HydrationBlazor.Shared.dll
+C:\prv\Projects\dotnet\blazorHydration\HydrationBlazor\HydrationBlazor\Shared\bin\Debug\net5.0\ref\HydrationBlazor.Shared.dll
+C:\prv\Projects\dotnet\blazorHydration\HydrationBlazor\HydrationBlazor\Shared\bin\Debug\net5.0\HydrationBlazor.Shared.pdb
+C:\prv\Projects\dotnet\blazorHydration\HydrationBlazor\HydrationBlazor\Shared\obj\Debug\net5.0\HydrationBlazor.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\prv\Projects\dotnet\blazorHydration\HydrationBlazor\HydrationBlazor\Shared\obj\Debug\net5.0\HydrationBlazor.Shared.AssemblyInfoInputs.cache
+C:\prv\Projects\dotnet\blazorHydration\HydrationBlazor\HydrationBlazor\Shared\obj\Debug\net5.0\HydrationBlazor.Shared.AssemblyInfo.cs
+C:\prv\Projects\dotnet\blazorHydration\HydrationBlazor\HydrationBlazor\Shared\obj\Debug\net5.0\HydrationBlazor.Shared.csproj.CoreCompileInputs.cache
+C:\prv\Projects\dotnet\blazorHydration\HydrationBlazor\HydrationBlazor\Shared\obj\Debug\net5.0\HydrationBlazor.Shared.dll
+C:\prv\Projects\dotnet\blazorHydration\HydrationBlazor\HydrationBlazor\Shared\obj\Debug\net5.0\ref\HydrationBlazor.Shared.dll
+C:\prv\Projects\dotnet\blazorHydration\HydrationBlazor\HydrationBlazor\Shared\obj\Debug\net5.0\HydrationBlazor.Shared.pdb
+C:\prv\Projects\dotnet\blazorHydration\HydrationBlazor\HydrationBlazor\Shared\obj\Debug\net5.0\HydrationBlazor.Shared.csprojAssemblyReference.cache

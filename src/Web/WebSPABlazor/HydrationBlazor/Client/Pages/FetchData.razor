@@ -1,0 +1,105 @@
+@page "/fetchdata"
+@inject HttpClient Http
+@using System.Threading
+<h1>Hydration Data</h1>
+
+@if (hydrations == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                @*<th>Date</th>
+                    <th>Samples</th>
+                    <th>Temp. (C)</th>
+                    <th>Hum. (%)</th>
+                    <th>Soil (%)</th>
+                    <th></th>*@
+
+                <th>Date</th>
+                <th>Temp. (C)</th>
+                <td>Indicator</td>
+                <td>Index</td>
+            </tr>
+        </thead>
+        <tbody>
+            @{var abc = hydrations.Select((item, index) =>
+                {
+                    return new
+                    {
+                        Date = $"{item.CreatedDateUtc.ToShortDateString()} {item.CreatedDateUtc.ToShortTimeString()}",
+                        Temp = item.Temp,
+                        TempIndicator = hydrations[index == hydrations.Count()-1 ? index : index+1 ].Temp.CompareTo(item.Temp),
+                        Index = index
+                    };
+                });
+
+                foreach (var item in abc)
+                {
+                    <tr>
+                        <td>@item.Date</td>
+                        <td>
+                            @if (item.TempIndicator > 0)
+                            {
+                                <span class="oi oi-chevron-bottom" style="color:#ff0000" title="chevron-bottom" aria-hidden="true"></span>
+                            }
+                            else if (item.TempIndicator < 0)
+                            {
+                                <span class="oi oi-chevron-top" style="color:#22ba36; text-align:right" title="chevron-top" aria-hidden="true"></span>
+                            }
+                            else
+                            {
+                                <span class="oi oi-minus" title="chevron-top" aria-hidden="true"></span>
+                            }
+                            @item.Temp
+                        </td>
+                    <td>@item.TempIndicator</td>
+                        <td>@item.Index</td>
+
+                    <td>@*@item.TempIndicator<svg class="icon" width="16px" height="16px" fill="#fff" viewBox="0 0 8 8"><use xlink:href="#chevron-bottom"></use></svg>*@</td>
+                </tr>
+            }
+
+
+            }
+
+
+            @*@foreach (var hydration in hydrations)
+                {
+                    <tr>
+                        <td>@hydration.CreatedDateUtc.ToShortDateString() @hydration.CreatedDateUtc.ToShortTimeString()</td>
+                        <td>@hydration.Samples</td>
+                        <td>@hydration.Temp</td>
+                        <td>@hydration.Hum</td>
+                        <td>@hydration.Soil</td>
+                        <td></td>
+                    </tr>
+                }*@
+        </tbody>
+    </table>
+}
+
+@code {
+    private Hydration[] hydrations;
+
+    protected override async Task OnInitializedAsync()
+    {
+        hydrations = await Http.GetFromJsonAsync<Hydration[]>("http://localhost:8080/hydration?page=1&pageSize=300");
+    }
+    public class Hydration
+    {
+        [System.Text.Json.Serialization.JsonPropertyName("_id")]
+        public string Id { get; set; }
+
+        public string SensorId { get; set; }
+        public string SensorName { get; set; }
+        public float Hum { get; set; }
+        public float Temp { get; set; }
+        public float Soil { get; set; }
+        public int Samples { get; set; }
+        public DateTime CreatedDateUtc { get; set; }
+    }
+}
