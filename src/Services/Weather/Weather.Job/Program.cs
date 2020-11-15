@@ -1,8 +1,6 @@
-﻿using System;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using System.Net.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Builder;
 using RestEase;
@@ -10,8 +8,8 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Http;
 using Weather.Infrastructure;
-using MongoDB.Bson;
-using MongoDB.Driver;
+using Weather.Job.OpenWeather;
+using System;
 
 namespace Weather.Job
 {
@@ -36,10 +34,13 @@ namespace Weather.Job
                                 Predicate = _ => true,
                                 ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
                             });
-                            endpoints.MapGet("/", async context =>
+                            endpoints.MapGet("/fc", async context =>
                             {
-                                
-                                //await context.Response.WriteAsync("Hello World!");
+                                //TODO: to remove
+                                var api = context.RequestServices.GetRequiredService<IOpenWeatherApi>();
+                                var response = await api.GetForecastWeather();
+
+                                await context.Response.WriteAsync(response);
                             });
                         });
                     });
@@ -57,7 +58,14 @@ namespace Weather.Job
                 .ConfigureServices(services =>
                 {
                     services.AddHostedService<CurrentWeatherService>();
-                    services.AddSingleton<CurrentWeatherServiceOptions>();
+                    services.AddSingleton(prov => {
+                        var conf = prov.GetRequiredService<IConfiguration>();
+                        var sampling = conf["CurrentWeatherService:SamplingInMinutes"];
+                        if(!int.TryParse(sampling, out int samplingInt))
+                            throw new ArgumentException("Value must be int.");
+                        
+                        return new CurrentWeatherServiceOptions { SamplingInMinutes = samplingInt };
+                    });
                     services.AddTransient(prov =>
                     {
                         var conf = prov.GetRequiredService<IConfiguration>();
@@ -69,16 +77,17 @@ namespace Weather.Job
                         return new WeatherContext(options);
                     });
 
-                    services.AddHealthChecks();
-                    services.AddHttpClient("weather", (provider, client) =>
+                    services.AddHealthChecks();                    
+                    services.AddTransient(provider => 
                     {
                         var configuration = provider.GetRequiredService<IConfiguration>();
-                        var weatherApiUrl = configuration["CurrentWeatherService:weatherapi:url"];
-                        client.BaseAddress = new Uri(weatherApiUrl);
+                        var weatherApiUrl = configuration["weatherapi:url"];
+                        var weatherApiKey = configuration["weatherapi:apikey"];
+                        var weatherApi = RestClient.For<IOpenWeatherApi>(weatherApiUrl);
+                        weatherApi.Units = "metric";
+                        weatherApi.AppId = weatherApiKey;
+                        return weatherApi;
                     });
-                    services.AddTransient(c => new RestClient(c.GetService<IHttpClientFactory>().CreateClient("weather"))
-                    {
-                    }.For<IOpenWeatherApi>());
                 })
                 .ConfigureLogging(configureLogging =>
                 {

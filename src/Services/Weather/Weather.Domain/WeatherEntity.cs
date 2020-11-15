@@ -22,6 +22,8 @@ namespace Weather.Domain
         public float Clouds { get; set; }
         [BsonDateTimeOptions(Kind = DateTimeKind.Utc)]
         public DateTime DateTimeUtc { get; set; }
+        public DateTime SunsetDateTImeUtc { get; set; }
+        public DateTime SunriseDateTImeUtc { get; set; }
     }
 
     public class WeatherConditionEntity

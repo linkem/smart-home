@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Weather.Job
+﻿namespace Weather.Job.OpenWeather
 {
     public class OpenWeatherModel
     {

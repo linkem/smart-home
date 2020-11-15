@@ -15,5 +15,7 @@ namespace Weather.Infrastructure
 
         }
         public IMongoCollection<WeatherEntity> Weather => _database.GetCollection<WeatherEntity>("weather");
+        public IMongoCollection<WeatherEntity> ForecastWeather => _database.GetCollection<WeatherEntity>("forecast");
+
     }
 }
